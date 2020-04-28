@@ -20,6 +20,12 @@ public class Partida {
 		this.horario = null;
 	}
 
+	public Partida() {
+		super();
+	}
+
+
+
 	public Equipe getCasa() {
 		return casa;
 	}
@@ -66,5 +72,12 @@ public class Partida {
 
 	public void setHorario(LocalDateTime horario) {
 		this.horario = horario;
+	}
+
+	@Override
+	public String toString() {
+		return casa.getNome() + " x " +  visitante.getNome();
 	}		
+	
+	
 }
