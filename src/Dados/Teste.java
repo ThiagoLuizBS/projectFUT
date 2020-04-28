@@ -27,8 +27,8 @@ public class Teste {
 		camp.add(new Estatistica(new Equipe("West Ham", 10, 20, new ArrayList<Jogador>(), new ArrayList<Liga>())));
 		camp.add(new Estatistica(new Equipe("Wolverhampton", 10, 20, new ArrayList<Jogador>(), new ArrayList<Liga>())));
 		
-		Liga pl = new Liga("PL", camp, new ArrayList<Rodada>());
-		
-		pl.getTabela().printarTabela();
+		Liga pl = new Liga("PL", camp);
+		pl.fazerRodadas();
+		//pl.getTabela().printarTabela();
 	}
 }

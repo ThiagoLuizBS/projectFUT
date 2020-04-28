@@ -8,6 +8,7 @@ public class Equipe {
 	private int capital;
 	private ArrayList<Jogador> jogadores;
 	private ArrayList<Liga> campeonatos;
+	private Estadio estadio;
 	
 	public Equipe(String nome, int valor, int capital, ArrayList<Jogador> jogadores, ArrayList<Liga> campeonatos) {
 		super();
@@ -16,6 +17,7 @@ public class Equipe {
 		this.capital = capital;
 		this.jogadores = jogadores;
 		this.campeonatos = campeonatos;
+		this.estadio = null;
 	}
 
 	public String getNome() {
@@ -57,5 +59,9 @@ public class Equipe {
 	public void setCampeonatos(ArrayList<Liga> campeonatos) {
 		this.campeonatos = campeonatos;
 	}	
+	
+	public Estadio getEstadio() {
+		return estadio;
+	}
 	
 }
