@@ -26,9 +26,8 @@ public class Liga {
 	public void fazerRodadas() {
 		ArrayList<Partida> partidas = new ArrayList<Partida>();		
 		ArrayList<Equipe> jaFoiRodada = new ArrayList<Equipe>();
-		System.out.println(jaFoiRodada.size());
-		Rodada rodada = new Rodada();
 		int contador = 0;
+		
 		for(int i = 0; i < 20; i++) {
 			for(int j = 0; j < 20; j++) {
 				if (i != j) {
@@ -38,27 +37,36 @@ public class Liga {
 		}
 		
 		Collections.shuffle(partidas);
-		System.out.println(partidas.toString());
-		for(int i = 0; i < 19; i++) {
+
+		for(int i = 0; i < 38; i++) {
+			Rodada r = new Rodada();
+			rodadas.add(r);
 			for(int j = 0; j < 10; j++) {
 				if(jaFoiRodada.size() != 0) {
-					while(contador == 0) {
-						for(int k = 0; k < jaFoiRodada.size(); k++) {
-							if(partidas.get(contador).getCasa().equals(jaFoiRodada.get(k))
-									|| partidas.get(contador).getVisitante().equals(jaFoiRodada.get(k))) {
-								contador++;
-								k = 0;
-							}
+					for(int k = 0; k < jaFoiRodada.size();) {
+						//System.out.println(partidas.size());
+						if(partidas.get(contador).getCasa().getNome().equals(jaFoiRodada.get(k).getNome())
+								|| partidas.get(contador).getVisitante().getNome().equals(jaFoiRodada.get(k).getNome())) {
+							contador++;
+							k = 0;
+						} else {
+							k++;
 						}
 					}
-				} else {
-					rodada.setPartidas(partidas.get(0));
-					jaFoiRodada.add(partidas.get(0).getCasa());
-					jaFoiRodada.add(partidas.get(0).getVisitante());
-					partidas.remove(0);					
-					System.out.println(partidas.toString());
-				}				
-			}		
-		}
+				}
+				
+				rodadas.get(i).setPartidas(partidas.get(contador));
+				jaFoiRodada.add(partidas.get(contador).getCasa());
+				jaFoiRodada.add(partidas.get(contador).getVisitante());
+				partidas.remove(contador);							
+			}
+			
+			Collections.shuffle(rodadas.get(i).getPartidas());			
+			jaFoiRodada.removeAll(jaFoiRodada);
+			//rodadas.get(i).imprimirRodada();
+			contador = 0;
+			
+		}		
+		Collections.shuffle(rodadas);
 	}
 }

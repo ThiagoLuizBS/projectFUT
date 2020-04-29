@@ -17,5 +17,12 @@ public class Rodada {
 		this.partidas.add(partidas);
 	}
 	
+	public void imprimirRodada() {
+		for(int i = 0; i < partidas.size(); i++) {
+			System.out.print(partidas.get(i).getCasa().getNome() + " x " + partidas.get(i).getVisitante().getNome() + " ");
+		}
+		System.out.println();
+	}
+	
 	
 }
