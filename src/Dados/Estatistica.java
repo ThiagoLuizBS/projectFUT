@@ -1,6 +1,6 @@
 package Dados;
 
-public class Estatistica {
+public class Estatistica implements Comparable<Estatistica>{
 	private Equipe equipe;
 	private int posicao;
 	private int pontos;
@@ -22,6 +22,10 @@ public class Estatistica {
 		this.golsPro = 0;
 		this.golsContra = 0;
 		this.saldo = 0;
+	}
+	
+	public void setPosicao(int posicao) {
+		this.posicao = posicao;
 	}
 	
 	public int getPosicao() {
@@ -65,6 +69,12 @@ public class Estatistica {
 	public int getGolsPro() {
 		return golsPro;
 	}
+	
+	public void setGols(int pro, int cont) {
+		this.setGolsPro(pro);
+		this.setGolsContra(cont);
+		this.setSaldo();
+	}
 
 	public void setGolsPro(int golsPro) {
 		this.golsPro += golsPro;
@@ -90,6 +100,28 @@ public class Estatistica {
 
 	public Equipe getEquipe() {
 		return equipe;
+	}
+	
+	@Override
+	public int compareTo(Estatistica outraEstatistica) {
+		if(this.getPontos() > outraEstatistica.getPontos()) {
+			return -1;
+		} else if(this.getPontos() < outraEstatistica.getPontos()) {
+			return 1;
+		} else {
+			if(this.getVitoria() > outraEstatistica.getVitoria()) {
+				return -1;
+			} else if(this.getVitoria() < outraEstatistica.getVitoria()) {
+				return 1;
+			} else {
+				if(this.getSaldo() > outraEstatistica.getSaldo()) {
+					return -1;
+				} else if(this.getSaldo() < outraEstatistica.getSaldo()) {
+					return 1;
+				}
+			}
+		}
+		return 0;
 	}
 
 }

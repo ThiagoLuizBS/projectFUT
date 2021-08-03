@@ -1,0 +1,3 @@
+Liga - 	fazer rodadas com times impares
+		resultados nao aleatorios
+		formato da liga

@@ -2,7 +2,7 @@ package Dados;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Random;
 
 public class Liga {
 	private String nome;
@@ -11,118 +11,82 @@ public class Liga {
 	private Tabela tabela;	
 	
 	
-	public Liga(String nome, ArrayList<Estatistica> equipes) {
+	public Liga(String nome, ArrayList<Estatistica> equipes, int returno) {
 		super();
 		this.nome = nome;
 		this.equipes = equipes;
 		this.rodadas = new ArrayList<Rodada>();
-		this.tabela = new Tabela(equipes);
+		this.tabela = new Tabela(equipes,nome);
+		this.fazerRodadasIV(returno);
+	}
+	
+	public String getNome() {
+		return nome;
 	}
 
 	public Tabela getTabela() {
 		return tabela;
 	}
 	
-	private boolean procurarPartida(Equipe a, Equipe b, ArrayList<Partida> partidas) {
-		boolean jaJogou = false;
-		for(int i = 0; i < partidas.size(); i++) {
-			if((partidas.get(i).getCasa().equals(a) && partidas.get(i).getVisitante().equals(b))
-					|| (partidas.get(i).getCasa().equals(b) && partidas.get(i).getVisitante().equals(a))) {
-				jaJogou = true;
-				i = partidas.size();
+	public void printarTabela() {
+		this.tabela.printarTabela();
+	}
+
+	private void fazerRodadasIV(int returno) {
+		ArrayList<Estatistica> times = new ArrayList<Estatistica>();
+		times.addAll(equipes);
+		Collections.shuffle(times);
+		int contador = 0;
+		for(int cont = 0; cont < returno+1; cont++) {
+			if(times.size() % 2 == 0) {
+				for(int i = 0; i < times.size()-1; i++) {
+					ArrayList<Partida> partidas = new ArrayList<Partida>();
+					for(int j = 0; j < times.size()/2; j++) {
+						if(i % 2 == 0 && j % 2 == 0) {
+							partidas.add(new Partida(times.get(contador),(times.get(times.size()-contador-1))));
+							contador++;
+						} else if(i % 2 == 0 && j % 2 == 1) {
+							partidas.add(new Partida(times.get(times.size()-contador-1),(times.get(contador))));
+							contador++;
+						} else if(i % 2 == 1 && j == 0) {
+							partidas.add(new Partida(times.get(times.size()-contador-1),(times.get(contador))));
+							contador++;				
+						} else if(i % 2 == 1 && j % 2 == 0) {
+							partidas.add(new Partida(times.get(contador),(times.get(times.size()-contador-1))));
+							contador++;				
+						} else if(i % 2 == 1 && j % 2 == 1) {
+							partidas.add(new Partida(times.get(times.size()-contador-1),(times.get(contador))));
+							contador++;				
+						}
+					}
+					contador = 0;
+					Collections.shuffle(partidas);
+					rodadas.add(new Rodada(partidas));				
+					for(int k = 0; k < times.size()-2; k++) {
+						times.add(times.get(1));
+						times.remove(times.get(1));
+					}
+				}
+			} else {
+				
 			}
-		}		
-		return jaJogou;
+		}
+		for(int i = 0; i < rodadas.size()/2; i++) {
+			for(int j = 0; j < rodadas.get(i).getPartidas().size(); j++) {
+				rodadas.get(i+(rodadas.size()/2)).getPartidas().get(j).inverter();
+			}			
+		}
 	}
 	
-	private int procurarPartida(ArrayList<Partida> partidas, Partida achada) {
-		int contador = 0;
-		for(int i = 0; i < partidas.size(); i++) {
-			System.out.println(partidas.size());
-			if(achada.equals(partidas.get(i))) {
-				contador = i;
-				i = partidas.size();
+	public void rodadasAleatorias() {
+		for(int i = 0; i < rodadas.size(); i++) {
+			System.out.println("Premier League rodada: " + (i+1));
+			for(int j = 0; j < rodadas.get(i).getPartidas().size(); j++) {
+				Random r = new Random();
+				rodadas.get(i).getPartidas().get(j).setPlacar(r.nextInt(5), r.nextInt(5));
+				if(rodadas.get(i).getPartidas().get(j).getCasa().getEquipe().getNome() == "Liverpool" || rodadas.get(i).getPartidas().get(j).getVisitante().getEquipe().getNome() == "Liverpool") System.out.println(rodadas.get(i).getPartidas().get(j).toString());
 			}
+			System.out.println();
 		}
-		
-		return contador;
-	}
-	
-	private ArrayList<Partida> reduzirPartidas(ArrayList<Partida> partidas, ArrayList<Equipe> jaJogou) {
-		ArrayList<Partida> reduzidas = new ArrayList<Partida>();	
-		
-		for(int i = 0; i < partidas.size(); i++) {
-			for(int j = 0; j < jaJogou.size(); j++) {
-				if(partidas.get(i).getCasa().equals(jaJogou.get(j))
-						|| partidas.get(i).getVisitante().equals(jaJogou.get(j))) {
-					
-				} else {
-					reduzidas.add(partidas.get(i));
-				}
-			}
-			
-		}
-		
-		return reduzidas;
-	}
-		
-	public void fazerRodadas() {
-		ArrayList<Partida> partidas = new ArrayList<Partida>();		
-		ArrayList<Equipe> jaJogou = new ArrayList<Equipe>();
-		int contador = 0;
-		int partida = 0;
-		
-		for(int i = 0; i < 20; i++) {
-			for(int j = 0; j < 20; j++) {
-				if (i != j && procurarPartida(equipes.get(i).getEquipe(), equipes.get(j).getEquipe(), partidas) == false) {
-					partidas.add(new Partida(equipes.get(i).getEquipe(),equipes.get(j).getEquipe()));
-				}
-			}
-		}
-		
-		for(int i = 0; i < 19; i++) {
-			Rodada r = new Rodada();
-			rodadas.add(r);
-		}
-		
-		Collections.shuffle(partidas);
-		
-		for(int i = 0; i < 19; i++) {			
-			for(int j = 0; j < 10; j++) {	
-				ArrayList<Partida> reduzidas = this.reduzirPartidas(partidas, jaJogou);
-				if(jaJogou.size() != 0) {
-					
-					for(int k = 0; k < jaJogou.size();) {
-						if(reduzidas.get(contador).getCasa().equals(jaJogou.get(k))) {
-							contador++;
-							k = 0;
-						} else if(reduzidas.get(contador).getVisitante().equals(jaJogou.get(k))) {
-							contador++;
-							k = 0;
-						} else {
-							k++;
-						}						
-					}					
-				}			
-				
-				
-				partida = this.procurarPartida(partidas, reduzidas.get(contador));
-							
-				rodadas.get(i).setPartidas(partidas.get(partida));
-				jaJogou.add(partidas.get(partida).getCasa());
-				jaJogou.add(partidas.get(partida).getVisitante());
-				partidas.remove(partida);
-				contador = 0;
-				partida = 0;
-			}
-								
-			jaJogou.removeAll(jaJogou);
-			rodadas.get(i).imprimirRodada();
-			
-		}		
-			
-		//Collections.shuffle(rodadas.get(i).getPartidas());						
-		//System.out.println(rodadas.size());
-		//Collections.shuffle(rodadas);
 	}
 }

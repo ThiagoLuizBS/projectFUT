@@ -3,14 +3,14 @@ package Dados;
 import java.time.LocalDateTime;
 
 public class Partida {
-	private Equipe casa;
-	private Equipe visitante;
+	private Estatistica casa;
+	private Estatistica visitante;
 	private int placarCasa;
 	private int placarVisitante;
 	private Estadio estadio;
 	private LocalDateTime horario;
 		
-	public Partida(Equipe casa, Equipe visitante) {
+	public Partida(Estatistica casa, Estatistica visitante) {
 		super();
 		this.casa = casa;
 		this.visitante = visitante;
@@ -23,22 +23,38 @@ public class Partida {
 	public Partida() {
 		super();
 	}
+	
+	public void setPlacar(int cas, int visi) {
+		this.setPlacarCasa(cas);
+		this.setPlacarVisitante(visi);
+		
+		if(cas > visi) {
+			this.casa.setVitoria();
+			this.visitante.setDerrota();
+		} else if(cas < visi) {
+			this.visitante.setVitoria();
+			this.casa.setDerrota();
+		} else {
+			this.casa.setEmpate();
+			this.visitante.setEmpate();
+		}
+		this.casa.setGols(cas, visi);
+		this.visitante.setGols(visi, cas);
+	}
 
-
-
-	public Equipe getCasa() {
+	public Estatistica getCasa() {
 		return casa;
 	}
 
-	public void setCasa(Equipe casa) {
+	public void setCasa(Estatistica casa) {
 		this.casa = casa;
 	}
 
-	public Equipe getVisitante() {
+	public Estatistica getVisitante() {
 		return visitante;
 	}
 
-	public void setVisitante(Equipe visitante) {
+	public void setVisitante(Estatistica visitante) {
 		this.visitante = visitante;
 	}
 
@@ -73,10 +89,16 @@ public class Partida {
 	public void setHorario(LocalDateTime horario) {
 		this.horario = horario;
 	}
+	
+	public void inverter() {
+		Estatistica aux = this.casa;
+		this.casa = this.visitante;
+		this.visitante = aux;		
+	}
 
 	@Override
 	public String toString() {
-		return casa.getNome() + " x " +  visitante.getNome();
+		return casa.getEquipe().getNome()+ " " + this.placarCasa + " x " + this.placarVisitante + " " + visitante.getEquipe().getNome();
 	}		
 	
 	
